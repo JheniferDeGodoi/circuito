@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Análise de circuito resistivo: Va, I4, I1, Is e I3</title>
+<meta name="description" content="Professor, fiz esse site de simulação pois estou sem computador.">
+<meta property="og:description" content="Professor, fiz esse site de simulação pois estou sem computador.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#eef2ef;--panel:#fff;--ink:#16231e;--mute:#5b6b64;--line:#c9d4ce;--wire:#16231e;--cur:#0b7a6b;--vol:#b4641a;--sh:#e3ebe6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a16;--panel:#18251f;--ink:#e6efe9;--mute:#97a79f;--line:#2d3f37;--wire:#e6efe9;--cur:#4fd1bd;--vol:#f0a35e;--sh:#223229}}
+:root[data-theme="dark"]{--bg:#101a16;--panel:#18251f;--ink:#e6efe9;--mute:#97a79f;--line:#2d3f37;--wire:#e6efe9;--cur:#4fd1bd;--vol:#f0a35e;--sh:#223229}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.4rem;margin:0 0 4px;font-weight:600}
+p.sub{margin:0 0 18px;color:var(--mute);max-width:60ch}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+svg{width:100%;height:auto;display:block}
+.w{stroke:var(--wire);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dot{fill:var(--wire)}
+.lbl{font:600 13px "IBM Plex Sans",sans-serif;fill:var(--ink)}
+.cur{font:500 12.5px "IBM Plex Mono",monospace;fill:var(--cur)}
+.vol{font:500 12.5px "IBM Plex Mono",monospace;fill:var(--vol)}
+.res{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.res div{background:var(--sh);border-radius:8px;padding:10px 12px}
+.res b{display:block;font:500 1.35rem "IBM Plex Mono",monospace}
+.res span{color:var(--mute);font-size:.85rem}
+.ctl{display:grid;grid-template-columns:34px 1fr 64px;align-items:center;gap:8px;margin:6px 0;font-size:.95rem}
+.ctl output{font-family:"IBM Plex Mono",monospace;text-align:right}
+input[type=range]{width:100%;accent-color:var(--cur)}
+button{font:600 .9rem "IBM Plex Sans",sans-serif;background:var(--ink);color:var(--bg);border:0;border-radius:8px;padding:8px 14px;cursor:pointer;margin-top:8px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--vol);outline-offset:2px}
+.chk{margin-top:10px;font-size:.88rem;color:var(--mute)}
+.ok{color:var(--cur);font-weight:600}
+.leg{display:flex;gap:16px;font-size:.85rem;color:var(--mute);margin-top:6px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.sol{margin-top:20px}.sol h2{font-size:1.15rem;margin:0 0 8px;font-weight:600}.sol ol{margin:0;padding-left:20px;max-width:75ch}.sol li{margin:6px 0}
+table{border-collapse:collapse;width:100%;margin-top:10px;font-size:.95rem}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}td.n{font-family:"IBM Plex Mono",monospace}
+.tw{overflow-x:auto}.fd{fill:var(--cur)}.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}.bar button{margin:0}.bar span{font-size:.85rem;color:var(--mute)}h2.s2{margin-top:22px}
+main>h1,main>p.sub,.sol,.leg,.bar span,.grid>div:nth-child(2){display:none}.grid{grid-template-columns:1fr;max-width:680px;margin:0 auto}.bar{justify-content:center}
+</style>
+</head>
+<body>
+<main>
+<h1>Análise de circuito resistivo</h1>
+<p class="sub"><i>Professor, fiz esse site de simulação pois estou sem computador.</i></p>
+<p class="sub"><b>Enunciado:</b> calcular no circuito abaixo os valores de Va, I₄, I₁, Is e I₃. Fonte de 20 V; R1 = 10 Ω, R2 = 20 Ω, R3 = 5 Ω, R4 = 14 Ω e R5 = 6 Ω.</p>
+<div class="grid">
+<div class="card">
+<svg viewBox="0 0 580 430" role="img" aria-label="Esquema do circuito com R1 a R5 e a fonte">
+<g id="draw"></g>
+<g class="w">
+<path d="M80 200H100M270 200H290M290 200H500"/>
+<path d="M80 380H500"/>
+<path d="M290 200V272M290 296V380"/>
+<path d="M270 380h40M278 388h24M286 396h8" />
+</g>
+<line x1="272" y1="278" x2="308" y2="278" stroke="var(--wire)" stroke-width="3"/>
+<line x1="280" y1="290" x2="300" y2="290" stroke="var(--wire)" stroke-width="3"/>
+<text class="lbl" x="314" y="283">+</text><text class="lbl" x="314" y="299">−</text>
+<text class="lbl" x="328" y="262">Fonte</text>
+<text class="vol" id="tV" x="328" y="278">20 V</text>
+<text class="cur" id="tIs" x="328" y="318">Is = 5 A ↑</text>
+<circle class="dot" cx="80" cy="200" r="4.5"/><circle class="dot" cx="290" cy="200" r="4.5"/><circle class="dot" cx="500" cy="200" r="4.5"/>
+<circle cx="290" cy="50" r="5" fill="var(--panel)" stroke="var(--wire)" stroke-width="2"/>
+<text class="lbl" x="60" y="190">c</text><text class="lbl" x="284" y="190">b</text>
+<text class="vol" id="tVc" x="40" y="172">Vc</text>
+<text class="lbl" x="304" y="42">Va</text><text class="vol" id="tVa" x="304" y="58">Va</text>
+<text class="vol" id="tVb" x="400" y="192">Vb</text>
+<g id="labels"></g>
+</svg>
+<div class="bar"><button id="play" type="button" aria-pressed="false">▶ Dar play</button><span>Os pontos andam mais rápido onde a corrente é maior.</span></div>
+<div class="leg"><span><i style="background:var(--cur)"></i>correntes</span><span><i style="background:var(--vol)"></i>tensões em relação ao terra</span></div>
+</div>
+<div>
+<div class="res" aria-live="polite">
+<div><span>Va</span><b id="rVa"></b></div>
+<div><span>I₄ (R4, de a para c)</span><b id="rI4"></b></div>
+<div><span>I₁ (R1, para o terra)</span><b id="rI1"></b></div>
+<div><span>Is (fonte)</span><b id="rIs"></b></div>
+<div><span>I₃ (R3, para o terra)</span><b id="rI3"></b></div>
+<div><span>I em R2 (b para c)</span><b id="rI2"></b></div>
+</div>
+<div class="card">
+<div id="ctls"></div>
+<button id="reset" type="button">Voltar aos valores do exercício</button>
+<div class="chk" id="chk"></div>
+</div>
+</div>
+</div>
+<section class="card sol">
+<h2>Resolução</h2>
+<ol>
+<li>O nó b está ligado direto ao topo de R3 pelo fio horizontal, então V<sub>b</sub> = 20 V e R3 fica entre b e o terra: <b>I₃ = 20 / 5 = 4 A</b>.</li>
+<li>Va é um nó sem ligação a mais nada. Logo, R5 e R4 estão em série e formam um ramo de 6 + 14 = 20 Ω entre b e c.</li>
+<li>Entre b e c, R2 (20 Ω) fica em paralelo com esse ramo de 20 Ω, o que dá 10 Ω. Em série com R1 (10 Ω), forma um divisor de tensão: V<sub>c</sub> = 20 · 10 / (10 + 10) = 10 V.</li>
+<li><b>I₁ = V<sub>c</sub> / R1 = 10 / 10 = 1 A</b>.</li>
+<li>A corrente pelo ramo R5–R4 é <b>I₄ = (20 − 10) / 20 = 0,5 A</b>.</li>
+<li><b>V<sub>a</sub> = 20 − 0,5 · 6 = 17 V</b> (confirmação: 10 + 0,5 · 14 = 17 V).</li>
+<li>Pela lei dos nós em b: <b>I<sub>s</sub> = I₁ + I₃ = 1 + 4 = 5 A</b>.</li>
+</ol>
+<div class="tw"><table>
+<thead><tr><th>Grandeza</th><th>Cálculo</th><th>Resultado</th></tr></thead>
+<tbody>
+<tr><td>V<sub>a</sub></td><td>20 − 0,5 · 6</td><td class="n">17 V</td></tr>
+<tr><td>I₄</td><td>(20 − 10) / 20</td><td class="n">0,5 A</td></tr>
+<tr><td>I₁</td><td>10 / 10</td><td class="n">1 A</td></tr>
+<tr><td>I<sub>s</sub></td><td>I₁ + I₃</td><td class="n">5 A</td></tr>
+<tr><td>I₃</td><td>20 / 5</td><td class="n">4 A</td></tr>
+</tbody></table></div>
+<h2 class="s2">Simulação</h2>
+<p style="margin:0;max-width:75ch">O esquema e os controles acima recalculam o circuito por análise nodal. Com os valores do exercício, o simulador reproduz exatamente a tabela. Aperte “Dar play” para ver a corrente circulando pelo circuito: a velocidade dos pontos é proporcional à corrente de cada trecho. Também dá para variar a fonte e os resistores e ver o efeito em cada corrente.</p>
+</section>
+</main>
+<script>
+(function(){
+var cur={};var def={V:20,R1:10,R2:20,R3:5,R4:14,R5:6},S=Object.assign({},def);
+var $=function(i){return document.getElementById(i)};
+var fmt=function(x,u){return x.toLocaleString('pt-BR',{maximumFractionDigits:3})+' '+u};
+var NS='http://www.w3.org/2000/svg';
+function zig(x1,y1,x2,y2,id){
+var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),a=Math.atan2(dy,dx)*180/Math.PI,z=70,s=(L-z)/2,d='M0 0H'+s,i;
+for(i=0;i<7;i++){d+='L'+(s+z/14*(2*i+1))+' '+(i%2?9:-9)}
+d+='L'+(s+z)+' 0H'+L;
+var g=document.createElementNS(NS,'g');g.setAttribute('transform','translate('+x1+' '+y1+') rotate('+a+')');
+g.innerHTML='<path class="w" d="'+d+'"/>';$('draw').appendChild(g)}
+zig(80,200,290,50);zig(290,50,500,200);zig(80,200,290,200);zig(80,200,80,380);zig(500,200,500,380);
+// o trecho de R2 já tem fio; sobrepõe sem problema
+var L=[['R1',112,292],['R2',150,232],['R3',512,292],['R4',100,100],['R5',410,100]];
+L.forEach(function(r){var t=document.createElementNS(NS,'text');t.setAttribute('class','lbl');t.setAttribute('x',r[1]);t.setAttribute('y',r[2]);t.id='l'+r[0];$('labels').appendChild(t)});
+[['I1',112,310],['I2',150,250],['I3',512,310],['I4',60,132],['I5',410,118]].forEach(function(r){var t=document.createElementNS(NS,'text');t.setAttribute('class','cur');t.setAttribute('x',r[1]);t.setAttribute('y',r[2]);t.id='c'+r[0];$('labels').appendChild(t)});
+// controles
+var names=[['V','Fonte','V',1,50],['R1','R1','Ω',1,50],['R2','R2','Ω',1,50],['R3','R3','Ω',1,50],['R4','R4','Ω',1,50],['R5','R5','Ω',1,50]];
+names.forEach(function(n){var d=document.createElement('div');d.className='ctl';
+d.innerHTML='<label for="s'+n[0]+'">'+n[1]+'</label><input type="range" id="s'+n[0]+'" min="'+n[3]+'" max="'+n[4]+'" step="1" value="'+S[n[0]]+'"><output id="o'+n[0]+'"></output>';
+$('ctls').appendChild(d);
+d.querySelector('input').addEventListener('input',function(e){S[n[0]]=+e.target.value;calc()})});
+$('reset').addEventListener('click',function(){S=Object.assign({},def);names.forEach(function(n){$('s'+n[0]).value=S[n[0]]});calc()});
+function calc(){
+var V=S.V,g1=1/S.R1,g2=1/S.R2,g4=1/S.R4,g5=1/S.R5;
+// nós: c (x) e a (y), com Vb = V e terra = 0
+// c: (g1+g2+g4)x - g4 y = g2 V ;  a: -g4 x + (g4+g5) y = g5 V
+var a11=g1+g2+g4,a12=-g4,a21=-g4,a22=g4+g5,b1=g2*V,b2=g5*V;
+var det=a11*a22-a12*a21,Vc=(b1*a22-a12*b2)/det,Va=(a11*b2-a21*b1)/det;
+var I1=Vc/S.R1,I2=(V-Vc)/S.R2,I3=V/S.R3,I4=(Va-Vc)/S.R4,I5=(V-Va)/S.R5,Is=I1+I3;
+names.forEach(function(n){$('o'+n[0]).textContent=S[n[0]]+' '+n[2]});
+$('rVa').textContent=fmt(Va,'V');$('rI4').textContent=fmt(I4,'A');$('rI1').textContent=fmt(I1,'A');
+$('rIs').textContent=fmt(Is,'A');$('rI3').textContent=fmt(I3,'A');$('rI2').textContent=fmt(I2,'A');
+$('tV').textContent=S.V+' V';$('tIs').textContent='Is = '+fmt(Is,'A')+' ↑';
+$('tVc').textContent='Vc = '+fmt(Vc,'V');$('tVa').textContent='= '+fmt(Va,'V');$('tVb').textContent='Vb = '+S.V+' V';
+['R1','R2','R3','R4','R5'].forEach(function(r){$('l'+r).textContent=r+' = '+S[r]+' Ω'});
+$('cI1').textContent=fmt(I1,'A')+' ↓';$('cI2').textContent=fmt(I2,'A')+' →';$('cI3').textContent=fmt(I3,'A')+' ↓';$('cI4').textContent='I₄ '+fmt(I4,'A')+' ↙';$('cI5').textContent=fmt(I5,'A')+' ↘';
+cur={Is:Is,bd:I3+I5,R3:I3,R5:I5,R4:I4,R2:I2,R1:I1,g1:I1,g3:I3};var err=Math.abs(I1-(I2+I4));
+$('chk').innerHTML='Conferência no nó c: I₂ + I₄ = '+fmt(I2+I4,'A')+' e I₁ = '+fmt(I1,'A')+' <span class="ok">'+(err<1e-9?'✓ bate':'✗')+'</span><br>Potência fornecida: '+fmt(V*Is,'W')+' — dissipada nos resistores: '+fmt(I1*I1*S.R1+I2*I2*S.R2+I3*I3*S.R3+I4*I4*S.R4+I5*I5*S.R5,'W')}
+var paths=[['Is','M290 380V200'],['bd','M290 200H500'],['R3','M500 200V380'],['R5','M500 200L290 50'],['R4','M290 50L80 200'],['R2','M290 200H80'],['R1','M80 200V380'],['g1','M80 380H290'],['g3','M500 380H290']];
+var dg=document.createElementNS(NS,'g'),dots=[],playing=false,last=0;
+$('labels').parentNode.insertBefore(dg,$('labels'));
+paths.forEach(function(p){var e=document.createElementNS(NS,'path');e.setAttribute('d',p[1]);e.setAttribute('fill','none');dg.appendChild(e);
+var len=e.getTotalLength(),n=Math.max(2,Math.floor(len/30)),arr=[],j;
+for(j=0;j<n;j++){var c=document.createElementNS(NS,'circle');c.setAttribute('r','3.6');c.setAttribute('class','fd');dg.appendChild(c);arr.push(c)}
+dots.push({k:p[0],e:e,len:len,n:n,arr:arr,off:0})});
+function place(){dots.forEach(function(d){var on=Math.abs(cur[d.k]||0)>1e-6;d.arr.forEach(function(c,j){
+if(!on){c.setAttribute('visibility','hidden');return}
+var pos=(((d.off+j*d.len/d.n)%d.len)+d.len)%d.len,pt=d.e.getPointAtLength(pos);
+c.setAttribute('visibility','visible');c.setAttribute('cx',pt.x);c.setAttribute('cy',pt.y)})})}
+function step(ts){if(!playing)return;var dt=Math.min(0.05,(ts-last)/1000);last=ts;
+dots.forEach(function(d){var I=cur[d.k]||0;d.off+=Math.max(-300,Math.min(300,I*40))*dt});place();requestAnimationFrame(step)}
+$('play').addEventListener('click',function(){playing=!playing;this.textContent=playing?'⏸ Pausar':'▶ Dar play';this.setAttribute('aria-pressed',playing);
+if(playing){last=performance.now();requestAnimationFrame(step)}});
+var oc=calc;calc=function(){oc();place()};
+calc();
+})();
+</script>
+</body>
+</html>
